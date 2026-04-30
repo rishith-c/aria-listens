@@ -19,16 +19,21 @@ let loading: Promise<ort.InferenceSession> | null = null;
 export async function ensureSession(): Promise<ort.InferenceSession> {
   if (session) return session;
   if (!loading) {
-    // ORT WASM binaries are copied into public/ort/ by `scripts/copy-ort.mjs`
-    // (which is run as a postinstall hook). Cross-origin isolation is not
-    // available on plain dev servers, so we disable threading and the
-    // proxy worker — single-threaded WASM is plenty fast for our 28KB model.
+    // ORT 1.18 — same-origin WASM, single-threaded for max compatibility
+    // (no SharedArrayBuffer / cross-origin-isolation requirement).
     ort.env.wasm.wasmPaths = "/ort/";
     ort.env.wasm.numThreads = 1;
+    ort.env.wasm.simd = true;
     ort.env.wasm.proxy = false;
     loading = ort.InferenceSession.create(MODEL_URL, {
       executionProviders: ["wasm"],
       graphOptimizationLevel: "all",
+    }).catch((err) => {
+      // Reset cached promise so callers can retry after a transient
+      // failure (e.g. user hadn't fully loaded WASM yet).
+      loading = null;
+      console.error("[aria] ONNX session init failed:", err);
+      throw err;
     });
   }
   session = await loading;
