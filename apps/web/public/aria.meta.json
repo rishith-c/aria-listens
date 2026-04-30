@@ -1,0 +1,19 @@
+{
+  "sample_rate": 16000,
+  "window_seconds": 1.0,
+  "n_fft": 512,
+  "hop_length": 256,
+  "mel_bins": 64,
+  "f_min": 80.0,
+  "f_max": 7000.0,
+  "input_shape": [
+    1,
+    1,
+    64,
+    63
+  ],
+  "classes": [
+    "normal",
+    "distress"
+  ]
+}

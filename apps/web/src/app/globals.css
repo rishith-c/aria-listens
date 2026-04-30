@@ -1,0 +1,127 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/*
+ * Aria — clinical instrument aesthetic.
+ * Calm at rest. Decisive on alarm. Designed by an ER doctor's sensibility.
+ *
+ * Resting palette: deep ink, paper-white, oxide-cyan accent (calm, trustable).
+ * Alert palette: blood-red ramp + amber, never gradients — emergency UI is
+ * always solid color so it reads instantly under stress.
+ */
+
+@layer base {
+  :root {
+    --background: 220 22% 4%;
+    --foreground: 30 8% 96%;
+
+    --card: 220 22% 6%;
+    --card-foreground: 30 8% 96%;
+
+    --popover: 220 22% 7%;
+    --popover-foreground: 30 8% 96%;
+
+    --primary: 30 8% 96%;
+    --primary-foreground: 220 22% 6%;
+
+    --secondary: 220 18% 11%;
+    --secondary-foreground: 30 8% 96%;
+
+    --muted: 220 18% 9%;
+    --muted-foreground: 220 8% 60%;
+
+    --accent: 188 75% 60%;
+    --accent-foreground: 220 22% 6%;
+
+    --destructive: 0 84% 56%;
+    --destructive-foreground: 30 8% 98%;
+
+    --border: 220 12% 18% / 0.42;
+    --input: 220 12% 16%;
+    --ring: 188 75% 60%;
+
+    --radius: 0.25rem;
+
+    /* Alert system */
+    --warn-amber: 32 100% 56%;
+    --alarm-red: 0 84% 54%;
+    --safe-green: 152 70% 50%;
+  }
+
+  * { @apply border-border; }
+
+  body {
+    @apply bg-background text-foreground antialiased selection:bg-foreground/15;
+    font-feature-settings: "ss01" 1, "ss02" 1, "calt" 1;
+  }
+
+  html, body { height: 100%; overflow: hidden; }
+
+  ::-webkit-scrollbar { width: 4px; height: 4px; }
+  ::-webkit-scrollbar-thumb { background: hsl(220 12% 18% / 0.6); }
+}
+
+@layer utilities {
+  .surface {
+    background: hsl(220 22% 6% / 0.78);
+    backdrop-filter: blur(28px) saturate(140%);
+    -webkit-backdrop-filter: blur(28px) saturate(140%);
+    border: 1px solid hsl(220 12% 22% / 0.45);
+  }
+
+  .display {
+    font-family: var(--font-display, "Instrument Serif"), Georgia, serif;
+    font-style: italic;
+    font-weight: 400;
+    letter-spacing: -0.02em;
+  }
+
+  .mono {
+    font-family: var(--font-mono, "JetBrains Mono"), ui-monospace, monospace;
+  }
+
+  .tabular { font-variant-numeric: tabular-nums; }
+
+  .micro {
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: hsl(220 8% 60%);
+  }
+
+  .grid-bg {
+    background-image:
+      linear-gradient(to right, hsl(220 12% 28% / 0.03) 1px, transparent 1px),
+      linear-gradient(to bottom, hsl(220 12% 28% / 0.03) 1px, transparent 1px);
+    background-size: 64px 64px;
+  }
+
+  /* Decisive alarm stripes — used only when life is in danger */
+  .alarm-stripes {
+    background:
+      repeating-linear-gradient(
+        45deg,
+        hsl(var(--alarm-red) / 0.95) 0px,
+        hsl(var(--alarm-red) / 0.95) 24px,
+        hsl(0 0% 0% / 0.95) 24px,
+        hsl(0 0% 0% / 0.95) 48px
+      );
+  }
+
+  @keyframes alarm-pulse {
+    0%, 100% { background-color: hsl(var(--alarm-red) / 0.92); }
+    50% { background-color: hsl(0 0% 6%); }
+  }
+
+  .alarm-pulse {
+    animation: alarm-pulse 0.6s steps(1, end) infinite;
+  }
+
+  @keyframes breath {
+    0%, 100% { transform: scale(1); opacity: 0.9; }
+    50% { transform: scale(1.06); opacity: 1; }
+  }
+
+  .breath { animation: breath 3s ease-in-out infinite; }
+}

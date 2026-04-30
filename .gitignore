@@ -1,0 +1,15 @@
+node_modules/
+.next/
+.turbo/
+__pycache__/
+*.pyc
+.venv/
+venv/
+.env
+.env.local
+*.log
+.DS_Store
+.idea/
+.vscode/
+data/
+weights/

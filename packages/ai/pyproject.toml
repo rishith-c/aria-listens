@@ -1,0 +1,22 @@
+[project]
+name = "aria-ai"
+version = "0.1.0"
+description = "Aria — choking-detection audio CNN. Trained from scratch, exported to ONNX for in-browser inference."
+requires-python = ">=3.11"
+dependencies = [
+    "numpy>=2.1",
+    "torch>=2.5",
+    "torchaudio>=2.5",
+    "onnx>=1.17",
+    "onnxruntime>=1.20",
+]
+
+[project.optional-dependencies]
+data = ["soundfile>=0.12", "scipy>=1.14"]
+
+[build-system]
+requires = ["setuptools>=70"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools]
+packages = ["aria"]
