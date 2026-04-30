@@ -19,9 +19,13 @@ let loading: Promise<ort.InferenceSession> | null = null;
 export async function ensureSession(): Promise<ort.InferenceSession> {
   if (session) return session;
   if (!loading) {
-    // Use WASM execution provider (universally supported, no GPU needed)
-    ort.env.wasm.wasmPaths =
-      "https://cdn.jsdelivr.net/npm/onnxruntime-web@1.20.1/dist/";
+    // ORT WASM binaries are copied into public/ort/ by `scripts/copy-ort.mjs`
+    // (which is run as a postinstall hook). Cross-origin isolation is not
+    // available on plain dev servers, so we disable threading and the
+    // proxy worker — single-threaded WASM is plenty fast for our 28KB model.
+    ort.env.wasm.wasmPaths = "/ort/";
+    ort.env.wasm.numThreads = 1;
+    ort.env.wasm.proxy = false;
     loading = ort.InferenceSession.create(MODEL_URL, {
       executionProviders: ["wasm"],
       graphOptimizationLevel: "all",
